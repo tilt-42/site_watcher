@@ -1,0 +1,12 @@
+[Unit]
+Description=site_watcher Telegram bot
+
+[Service]
+WorkingDirectory=%h/projects/site_watcher
+EnvironmentFile=%h/projects/site_watcher.env
+ExecStart=%h/projects/site_watcher/.venv/bin/python -m site_watcher.telegram_bot
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target
