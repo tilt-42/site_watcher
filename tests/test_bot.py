@@ -77,11 +77,12 @@ def check_schedule():
   rng = random.Random(1)
   waits = [day_delay(rng) for _ in range(20000)]
   assert min(waits) >= 5 and max(waits) <= 34
-  assert 19 < sum(waits) / len(waits) < 21
+  # With 4 - gamma(4, 1.25): average 19 s, about 90% between 10 and 30 s, 7.5% below and 2.5% above.
+  assert 18.5 < sum(waits) / len(waits) < 19.5
   inside = sum(10 <= w <= 30 for w in waits) / len(waits)
   below = sum(w < 10 for w in waits) / len(waits)
   above = sum(w > 30 for w in waits) / len(waits)
-  assert 0.85 < inside < 0.93 and 0.03 < below < 0.08 and 0.03 < above < 0.08, (inside, below, above)
+  assert 0.87 < inside < 0.93 and 0.06 < below < 0.09 and 0.015 < above < 0.04, (inside, below, above)
   assert all(5 <= next_delay(at(14, 0), rng) <= 34 for _ in range(100))
 
   assert '(night' in live_text(at(1, 0), at(1, 5), find_offers(make_page(0)))

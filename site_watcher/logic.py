@@ -91,10 +91,11 @@ def is_night(moment):
 
 
 def day_delay(rng=random):
-  """A random wait: equally likely anywhere from 10 to 30 s, plus a left-skewed adjustment that averages 0.
+  """A random wait: equally likely anywhere from 10 to 30 s, plus a left-skewed adjustment.
 
-  The adjustment is 4 minus a gamma value with mean 4, so it is usually slightly positive (at most +4 s)
-  and sometimes clearly negative. About 89% of waits fall between 10 and 30 s, and the average is 20 s.
+  The adjustment is 4 minus a gamma value with mean 5 (shape 4, scale 1.25), so it averages -1 s: usually
+  slightly positive (at most +4 s) and sometimes clearly negative. About 90% of waits fall between 10 and 30 s,
+  and the average is 19 s.
   """
   return max(MIN_INTERVAL_SECONDS, rng.uniform(10, 30) + 4 - rng.gammavariate(4, 1.25))
 
