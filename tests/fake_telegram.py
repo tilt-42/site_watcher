@@ -18,6 +18,8 @@ class FakeServer(BaseRequest):
     self.alerts = []
     self.sent = []  # (chat_id, text) for every sendMessage, in order.
     self.blocked = set()  # Chat IDs that act like people who blocked the bot.
+    self.silent = set()  # IDs of messages sent without a notification.
+    self.edits = 0
 
   @property
   def read_timeout(self):
@@ -53,10 +55,15 @@ class FakeServer(BaseRequest):
         return 403, b'{"ok": false, "error_code": 403, "description": "Forbidden: bot was blocked by the user"}'
       self.sent.append((chat_id, params['text']))
       self.next_id += 1
+      if params.get('disable_notification'):
+        self.silent.add(self.next_id)
       self.messages[self.next_id] = (params['text'], markup)
       return self.respond(self.message_json(self.next_id, params['text']))
     if endpoint == 'editMessageText':
       message_id = params['message_id']
+      if message_id not in self.messages:
+        return 400, b'{"ok": false, "description": "Bad Request: message to edit not found"}'
+      self.edits += 1
       if self.messages[message_id] == (params['text'], markup):
         return 400, b'{"ok": false, "description": "Bad Request: message is not modified"}'
       self.messages[message_id] = (params['text'], markup)
