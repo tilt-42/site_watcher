@@ -9,7 +9,7 @@ from telegram.ext import Application, CommandHandler
 
 from site_watcher.logic import PAGE_URL, WATCH_LABEL, PageFormatError, Subscribers, Watcher, find_offers, summary
 
-CHECK_INTERVAL_SECONDS = 60
+CHECK_INTERVAL_SECONDS = 10
 USER_AGENT = 'Mozilla/5.0 (compatible; site_watcher/1.0)'
 
 logger = logging.getLogger(__name__)
@@ -21,7 +21,7 @@ HELP_TEXT = (
   '/stop turns the messages off.'
 )
 SUBSCRIBED_TEXT = (
-  f"You're subscribed. I check the page every minute and will message you here as soon as tickets for "
+  f"You're subscribed. I check the page every 10s and will message you here as soon as tickets for "
   f'{WATCH_LABEL} become available.\n\n/status shows the numbers right now. /stop turns the messages off.'
 )
 UNSUBSCRIBED_TEXT = 'Messages are off for this chat. Send /start to turn them back on.'
